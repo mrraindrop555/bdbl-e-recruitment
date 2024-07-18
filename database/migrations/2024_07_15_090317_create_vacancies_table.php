@@ -16,11 +16,12 @@ return new class extends Migration
             $table->timestamps();
 
             $table->string('position_title');
+            $table->double('benchmark');
             $table->integer('number_of_slots');
             $table->json('employment_type');
             $table->json('qualifications');
             $table->json('salary_and_benefits');
-            $table->boolean('is_open');
+            $table->enum('status', ["Open", "Closed", "Shortlisted"]);
         });
     }
 

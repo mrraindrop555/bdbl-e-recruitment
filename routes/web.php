@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AdminApplicationController;
 use App\Http\Controllers\AdminVacancyController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\VacancyController;
 use App\Models\Vacancy;
@@ -12,7 +14,10 @@ Route::get('/', function () {
 });
 
 Route::resource('/vacancy', VacancyController::class);
+Route::get('/vacancy/{vacancy}/apply', [VacancyController::class, 'apply']);
+Route::post('/vacancy/{vacancy}/applicaiton', [ApplicationController::class, 'store'])->name('application');
 Route::get('/result', [VacancyController::class, 'result']);
+Route::get('/result/{vacancy}', [ApplicationController::class, 'index'])->name('result');
 
 Route::get('/detail', function () {
     return view('Detail');
@@ -43,4 +48,8 @@ Route::prefix('admin')
             return redirect('/admin/vacancy');
         });
         Route::resource('/vacancy', AdminVacancyController::class);
+        Route::post('/vacancy/{vacancy}/toggle', [AdminVacancyController::class, 'toggleStatus']);
+        Route::get('/result', [AdminVacancyController::class, 'result']);
+        Route::get('/result/{vacancy}', [AdminApplicationController::class, 'index']);
+        Route::post('/vacancy/{vacancy}/shortlist', [AdminVacancyController::class, 'shortlist']);
     });

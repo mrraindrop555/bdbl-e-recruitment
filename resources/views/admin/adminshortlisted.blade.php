@@ -1,36 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-
-</head>
-
-<body style="background-color: #f4f5f7;">
-    <nav class="navbar" style="background-color:#00ab41">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand d-flex">
-                <img src="{{ asset('assets/Logo.png') }}" alt="Description" class="logo">
-                <h5 class="d-none d-sm-block my-auto" style="color:white;">Bhutan Development Bank Limited</h5>
-            </a>
-            <div class="d-flex  mr-lg-5">
-                <a href="/adminresult" class="btn" style="background-color:#fff;border:none;color:#00ab41;padding:7px 40px;border-radius:2px;">Logout</a>
-            </div>
-        </div>
-    </nav>
-    <div class="table-container">
-        <h4>Job vacancy</h4>
+<x-layouts.admin>
+    <form action="{{ "/admin/vacancy/{$vacancy->id}/shortlist" }}" method="POST" class="table-container">
+        @csrf
+        <h4>Job vacancy ({{ $vacancy->status }})</h4>
         <div style="margin-bottom:20px">
-            Individuals selected for their respective positions have been listed accordingly:
+            Individuals selected for their respective positions have been listed accordingly
         </div>
-        <div class="d-flex  mb-4">
-            <a href="/" class="btn" style="background-color:#00ab41;border:none;color:white;padding:7px 40px;border-radius:2px">View Vacancy</a>
+
+        <div style="margin-bottom:20px">
+            Benchmark: {{ $vacancy->benchmark }}
         </div>
+        <div class="d-flex justify-content-between mb-4">
+            <a href="/admin" class="btn"
+                style="background-color:#00ab41;border:none;color:white;padding:7px 40px;border-radius:2px">View
+                Vacancy</a>
+            @if ($vacancy->status == 'Closed')
+                <button type="submit" class="btn"
+                    style="background-color:#00ab41;border:none;color:white;padding:7px 40px;border-radius:2px">Shortlist</button>
+            @endif
+        </div>
+
+        @error('shortlisted')
+            <div class="text-danger">{{ $message }}</div>
+        @enderror
+
         <table class="table table-bordered" style="color: #212122;">
             <thead>
                 <tr class="text-center">
@@ -41,33 +33,25 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="text-center">
-                    <td scope="row">1</td>
-                    <td> 11407002216</td>
-                    <td class="text-center">54</td>
-                    <td class="text-center">
-                        <input type="checkbox" name="selection" style="margin-right: 10px;">
-                        <span style="flex: none;">selected</span>
-                    </td>
-
-                </tr>
-
-                <tr class="text-center">
-                    <td scope="row">2</td>
-                    <td> 11407002216</td>
-                    <td class="text-center">60</td>
-                    <td class="text-center">
-                        <input type="checkbox" name="selection" style="margin-right: 10px;">
-                        <span style="flex: none;">selected</span>
-                    </td>
-
-                </tr>
-
+                @foreach ($applications as $application)
+                    <tr class="text-center">
+                        <td scope="row">{{ $loop->index + 1 }}</td>
+                        <td>{{ $application->cid }}</td>
+                        <td class="text-center">{{ $application->marks }}</td>
+                        <td class="text-center">
+                            @if ($vacancy->status == 'Open')
+                                <span>Pending</span>
+                            @elseif ($vacancy->status == 'Closed')
+                                <input type="checkbox" name="shortlisted[]" value="{{ $application->id }}"
+                                    @if ($application->marks >= $vacancy->benchmark) checked @endif style="margin-right: 10px;">
+                                <span style="flex: none;">Selected</span>
+                            @elseif ($vacancy->status == 'Shortlisted' && $application->is_selected)
+                                <span class='text-success'>Selected</span>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
-    </div>
-
-</body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-</html>
+    </form>
+</x-layouts.admin>

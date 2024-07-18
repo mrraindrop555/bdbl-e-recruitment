@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Vacancy>
-*/
+ */
 class VacancyFactory extends Factory
 {
     /**
@@ -18,11 +18,12 @@ class VacancyFactory extends Factory
     {
         return [
             'position_title' => fake()->jobTitle(),
+            'benchmark' => fake()->numberBetween(65, 75),
             'number_of_slots' => fake()->numberBetween(1, 4),
             'employment_type' => fake()->sentences(fake()->numberBetween(2, 6)),
             'qualifications' => fake()->sentences(fake()->numberBetween(2, 6)),
             'salary_and_benefits' => ['Basic salary Nu. ' . fake()->numberBetween(20000, 100000), ...fake()->sentences(fake()->numberBetween(2, 6))],
-            'is_open' => fake()->boolean()
+            'status' => fake()->randomElement(['Open', 'Closed']),
         ];
     }
 }

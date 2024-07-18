@@ -17,12 +17,12 @@
             <input type="email" name="email" value="{{ old('name') }}" autocomplete="off"
                 placeholder="username@example.com">
             @error('email')
-                <div>{{ $message }}</div>
+                <div style="color:red;">{{ $message }}</div>
             @enderror
         </div>
         <div class="row">
             <label for="password">Password</label>
-            <input type="password" name="password">
+            <input type="password" name="password" value="{{ old('password') }}">
         </div>
         <button type="submit">Login</button>
     </form>

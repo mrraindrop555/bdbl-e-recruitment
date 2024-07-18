@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Application;
 use App\Models\Vacancy;
+use Closure;
 use Illuminate\Http\Request;
 
 class VacancyController extends Controller
@@ -11,15 +13,25 @@ class VacancyController extends Controller
     {
         return view('Index', [
             'vacancies' => Vacancy::with('attachment')
-                ->where('is_open', true)
+                ->where('status', 'Open')
                 ->get()
         ]);
     }
 
-    public function show(Request $request, Vacancy $vacancy)
+    public function show(Vacancy $vacancy)
     {
         return view(
             'Detail',
+            [
+                'vacancy' => $vacancy
+            ]
+        );
+    }
+
+    public function apply(Vacancy $vacancy)
+    {
+        return view(
+            'Application',
             [
                 'vacancy' => $vacancy
             ]
@@ -31,8 +43,9 @@ class VacancyController extends Controller
         return view(
             'Result',
             [
-                'vacancies' => Vacancy::where('is_open', false)
-                    ->get()
+                'vacancies' => Vacancy::withCount('applications')
+                    ->where('status', 'Shortlisted')
+                    ->get(),
             ]
         );
     }

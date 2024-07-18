@@ -1,30 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-
-</head>
-
-<body>
-    <nav class="navbar" style="background-color:#00ab41">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand d-flex">
-                <img src="{{ asset('assets/Logo.png') }}" alt="Description" class="logo">
-                <h5 class="d-none d-sm-block my-auto" style="color:white;">Bhutan Development Bank Limited</h5>
-            </a>
-            <div class="d-flex  mr-lg-5">
-                <a href="/adminresult" class="btn"
-                    style="background-color:#fff;border:none;color:#00ab41;padding:7px 40px;border-radius:2px;">Logout</a>
-            </div>
-        </div>
-    </nav>
+<x-layouts.admin>
     <section class="vh-100" style="background-color: #f4f5f7;">
         <div class="container-fluid py-5">
             <div class="row d-flex justify-content-center align-items-center">
@@ -34,7 +8,16 @@
                             <div class="col-md-10">
                                 <div class="card-body p-4">
                                     <h6 class="text-dark" style="font-size: 24px;">General Manager ICT & Digital Banking
-                                        Division</h6>
+                                        Division (
+                                        @if ($vacancy->status == 'Open')
+                                            <span class="text-success">Open</span>
+                                        @elseif ($vacancy->status == 'Closed')
+                                            <span class="text-danger">Closed</span>
+                                        @else
+                                            <span class="">Shortlisted</span>
+                                        @endif
+                                        )
+                                    </h6>
 
                                     <hr class="mt-0 mb-4">
                                     <div class="row pt-1">
@@ -80,8 +63,27 @@
                                     </div>
                                     <a href="/result" class="btn mt-2"
                                         style="background-color:#00ab41;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Edit</a>
-                                    <a href="/result" class="btn mt-2"
-                                        style="background-color:red;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Delete</a>
+                                    <form class="d-inline" method="POST"
+                                        action="{{ "/admin/vacancy/{$vacancy->id}" }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn mt-2"
+                                            style="background-color:red;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Delete</button>
+                                    </form>
+                                    @if ($vacancy->status != 'Shortlisted')
+                                        <form class="d-inline" method="POST"
+                                            action="{{ "/admin/vacancy/{$vacancy->id}/toggle" }}">
+                                            @csrf
+                                            <button type="submit" class="btn mt-2"
+                                                style="background-color:gray;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">
+                                                @if ($vacancy->status == 'Open')
+                                                    Close
+                                                @else
+                                                    Open
+                                                @endif
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -89,10 +91,4 @@
                 </div>
             </div>
     </section>
-
-</body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-</script>
-
-</html>
+    </x-layouts.guest>
