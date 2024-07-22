@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Application;
 use App\Models\Vacancy;
 
 class AdminApplicationController extends Controller
@@ -11,8 +12,17 @@ class AdminApplicationController extends Controller
         return view('admin/adminshortlisted', [
             'vacancy' => $vacancy,
             'applications' => $vacancy->applications()
-                ->orderBy('marks', 'desc')
+                ->orderBy('final_score', 'desc')
                 ->get()
+        ]);
+    }
+
+    public function show(Application $application)
+    {
+        $application->load(['vacancy']);
+
+        return view('admin.adminApplication', [
+            'application' => $application
         ]);
     }
 }

@@ -8,10 +8,10 @@
     <title>Document</title>
 </head>
 
-<body>
-    <h1>Admin Login</h1>
+<body style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; flex-direction: column;">
     <form action="/login" method="POST">
         @csrf
+        <div style="text-align: center; font-size: 30px; margin-bottom: 10px; color: rgb(80, 78, 78); font-weight: 600">ADMIN LOGIN</div>
         <div class="row">
             <label for="email">Email</label>
             <input type="email" name="email" value="{{ old('name') }}" autocomplete="off"
@@ -26,6 +26,9 @@
         </div>
         <button type="submit">Login</button>
     </form>
+    <div style="opacity: 0.3; margin-top: 20px;">
+        BDBL e-Recruitment 2024
+    </div>
 </body>
 
 </html>

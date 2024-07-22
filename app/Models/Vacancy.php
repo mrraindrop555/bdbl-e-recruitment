@@ -37,6 +37,10 @@ class Vacancy extends Model
         parent::boot();
         self::deleting(function ($vacancy) {
             $vacancy->attachment?->delete();
+
+            $vacancy->applications->each(function ($application) {
+                $application->delete();
+            });
         });
     }
 }

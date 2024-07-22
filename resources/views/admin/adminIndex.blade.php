@@ -3,19 +3,19 @@
         <h4>Job vacancy</h4>
         <div style="margin-bottom:20px">
             The Management of Bhutan Development Bank (BDB) would like to announce vacancy for the position indicated
-            below in the table:
+            below in the table.
         </div>
 
         <div class="d-flex justify-content-between mb-4">
             <div>
                 <a href="/admin/result" class="btn"
                     style="background-color:#00ab41;border:none;color:white;padding:7px 40px;border-radius:2px;">View
-                    result</a>
+                    Results</a>
             </div>
             <div>
-                <a class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                <a href="/admin/vacancy/create" class="btn"
                     style="background-color:#00ab41;border:none;color:white;padding:7px 40px;border-radius:2px;">Add
-                    vacancy</a>
+                    Vacancy</a>
             </div>
         </div>
 
@@ -25,27 +25,26 @@
                     <th scope="col">Sl/no</th>
                     <th scope="col">Position Title</th>
                     <th scope="col">Slot</th>
-                    <th scope="col">Employment Type & Grade</th>
-                    <th>Attachments</th>
-                    <th>Status</th>
+                    <th scope="col" class="d-none d-md-table-cell">Employment Type & Grade</th>
+                    <th class="d-none d-md-table-cell">Attachments</th>
                     <th></th>
-
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($vacancies as $vacancy)
                     <tr>
-                        <td scope="row">{{ $loop->index + 1 }}</td>
-                        <td>{{ $vacancy->position_title }}</td>
+                        <td scope="row" class="text-center">{{ $loop->index + 1 }}</td>
+                        <td><x-job-title :vacancy="$vacancy" /></td>
                         <td class="text-center">{{ $vacancy->number_of_slots }}</td>
-                        <td>
+                        <td class="d-none d-md-table-cell">
                             <ul>
                                 @foreach ($vacancy->employment_type as $value)
                                     <li>{{ $value }}</li>
                                 @endforeach
                             </ul>
                         </td>
-                        <td>
+                        <td class="d-none d-md-table-cell">
                             @if ($vacancy->attachment)
                                 <a href="{{ $vacancy->attachment->src }}" style="color:#00ab41">Download TOR</a>
                             @else
@@ -53,18 +52,16 @@
                             @endif
                         </td>
                         <td>
-                            @if ($vacancy->status == 'Open')
-                                <span class=text-success>Open</span>
-                            @elseif($vacancy->status == 'Closed')
-                                <span class=text-danger>Closed</span>
-                            @else
-                                <span class=>Shortlisted</span>
-                            @endif
-                        </td>
-                        <td>
                             <a href="{{ "/admin/vacancy/{$vacancy->id}" }}"
                                 style="text-decoration: none;color:#00ab41">More
                                 Details</a>
+                        </td>
+                        <td class="text-center">
+                            @if ($vacancy->status != 'Shortlisted')
+                                <a href="/admin/vacancy/{{ $vacancy->id }}/edit">
+                                    <img src="{{ asset('assets/edit.png') }}" height="25" style="opacity: 0.7;">
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
@@ -73,7 +70,7 @@
             </tbody>
         </table>
 
-        <!-- Modal -->
+        {{-- <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -108,13 +105,14 @@
                                 @enderror
                             </div>
                             <div class="col-12">
-                                <x-multi-input name="employment_type" title="Employment Type & Grade" />
+                                <x-multi-input id="m1" name="employment_type" title="Employment Type & Grade" />
                             </div>
                             <div class="col-12">
-                                <x-multi-input name="qualifications" title="Qualification & Criteria" />
+                                <x-multi-input id="m2" name="qualifications" title="Qualification & Criteria" />
                             </div>
                             <div class="col-md-12">
-                                <x-multi-input name="salary_and_benefits" title="Salary & Other Benefits" />
+                                <x-multi-input id="m3" name="salary_and_benefits"
+                                    title="Salary & Other Benefits" />
                             </div>
                             <div class="my-4">
                                 <input class="form-control" type="file" name="attachment"
@@ -144,6 +142,6 @@
                     });
                 </script>
             @endif
-        @endpush
+        @endpush --}}
     </div>
 </x-layouts.admin>

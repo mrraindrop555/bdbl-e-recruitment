@@ -39,8 +39,8 @@ class ShortlistResult extends Notification
     {
         return (new MailMessage)
             ->greeting("Hello {$this->application->name}!")
-            ->lineIf($this->application->is_selected, "Congratulations! You have been shortlisted for {$this->application->vacancy->position_title}.")
-            ->lineIf(!$this->application->is_selected, "Sorry! You have not been shortlisted for {$this->application->vacancy->position_title}.")
+            ->lineIf($this->application->is_shortlisted, "Congratulations! You have been shortlisted for {$this->application->vacancy->position_title}.")
+            ->lineIf(!$this->application->is_shortlisted, "Sorry! You have not been shortlisted for {$this->application->vacancy->position_title}.")
             ->action('Result', url("/result/{$this->application->vacancy->id}"))
             ->line('For more information, please contact the employer.');
     }

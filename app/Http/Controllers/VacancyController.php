@@ -13,7 +13,7 @@ class VacancyController extends Controller
     {
         return view('Index', [
             'vacancies' => Vacancy::with('attachment')
-                ->where('status', 'Open')
+                ->whereNot('status', 'Shortlisted')
                 ->get()
         ]);
     }

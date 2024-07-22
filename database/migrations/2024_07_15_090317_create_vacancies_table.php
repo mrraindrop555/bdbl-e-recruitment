@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('position_title');
             $table->double('benchmark');
             $table->integer('number_of_slots');
+            $table->date('close_date');
             $table->json('employment_type');
             $table->json('qualifications');
             $table->json('salary_and_benefits');

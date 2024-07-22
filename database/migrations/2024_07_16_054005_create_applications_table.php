@@ -18,8 +18,21 @@ return new class extends Migration
             $table->integer('cid');
             $table->string('name');
             $table->string('email');
-            $table->integer('marks');
-            $table->boolean('is_selected');
+
+            $table->string('class_x_school_name');
+            $table->year('class_x_completion_year');
+            $table->json('class_x_marks');
+            $table->double('class_x_avg');
+
+            $table->string('class_xii_school_name');
+            $table->enum('class_xii_stream', ['science', 'commerce', 'arts']);
+            $table->year('class_xii_completion_year');
+            $table->json('class_xii_marks');
+            $table->double('class_xii_avg');
+
+            $table->double('final_score');
+
+            $table->boolean('is_shortlisted');
 
             $table->foreignId('vacancy_id')->constrained()->onDelete('cascade');
         });

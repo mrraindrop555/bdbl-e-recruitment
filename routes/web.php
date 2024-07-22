@@ -51,5 +51,6 @@ Route::prefix('admin')
         Route::post('/vacancy/{vacancy}/toggle', [AdminVacancyController::class, 'toggleStatus']);
         Route::get('/result', [AdminVacancyController::class, 'result']);
         Route::get('/result/{vacancy}', [AdminApplicationController::class, 'index']);
+        Route::get('/application/{application}', [AdminApplicationController::class, 'show']);
         Route::post('/vacancy/{vacancy}/shortlist', [AdminVacancyController::class, 'shortlist']);
     });
