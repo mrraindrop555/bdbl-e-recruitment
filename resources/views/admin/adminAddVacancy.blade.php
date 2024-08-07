@@ -7,6 +7,25 @@
             <h5 class="card-header bg-white">Add Vacancy</h5>
             <div class="card-body">
                 <div class="row">
+                    <div>
+                        <div class="d-flex gap-5 mb-3">
+                            <div>
+                                <input type="radio" value="External" name="type"
+                                    @if (old('type') == 'External') checked @endif>External
+                            </div>
+                            <div>
+                                <input type="radio" value="Experience" name="type"
+                                    @if (old('type') == 'Experience') checked @endif>Experience
+                            </div>
+                            <div>
+                                <input type="radio" value="Internal" name="type"
+                                    @if (old('type') == 'Internal') checked @endif>Internal
+                            </div>
+                        </div>
+                        @error('type')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="col-md-4">
                         <label for="inputEmail4" class="form-label">Position Title</label>
                         <input type="text" name="position_title" value="{{ old('position_title') }}"
@@ -15,15 +34,23 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="d-md-flex col-md-4 gap-3">
-                        <div class="">
-                            <label for="closeDate" class="form-label">Close Date</label>
-                            <input type="date" name="close_date" value="{{ old('benchmark') }}" min="1"
+                    <div class="col-md-4">
+                        <label for="closeDate" class="form-label">Close Datetime</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">
+                                <select name="closure" style="border: 0; background-color: transparent;">
+                                    <option>Auto</option>
+                                    <option>Manual</option>
+                                </select>
+                            </span>
+                            <input type="datetime-local" step="any" name="close_datetime" value="{{ old('close_datetime') }}"
                                 class="form-control" id="closeDate">
-                            @error('close_date')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
                         </div>
+                        @error('close_datetime')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="d-md-flex col-md-4 gap-3">
                         <div class="">
                             <label for="slots" class="form-label">Slots</label>
                             <input name="number_of_slots" value="{{ old('number_of_slots') }}" type="number"

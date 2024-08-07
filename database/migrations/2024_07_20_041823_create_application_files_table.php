@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->string('filename');
+            $table->string('type')->unique();
 
             $table->foreignId('application_id')->constrained()->onDelete('cascade');
         });

@@ -9,7 +9,7 @@ use App\Models\Vacancy;
 use App\Notifications\VacancyApplied;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
+
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rule;
 
@@ -17,7 +17,9 @@ class ApplicationController extends Controller
 {
     public function index(Vacancy $vacancy)
     {
-        Gate::allowIf(fn () => $vacancy->status == 'Shortlisted');
+        if($vacancy->status != 'Shortlisted'){
+            abort(403);
+        }
 
         return view('shortlisted', [
             'vacancy' => $vacancy,
@@ -29,7 +31,9 @@ class ApplicationController extends Controller
 
     public function store(Request $request, Vacancy $vacancy)
     {
-        Gate::allowIf(fn () => $vacancy->status == 'Open');
+        if($vacancy->status != 'Open'){
+            abort(403);
+        }
 
         $validated = $request->validate([
             'name' => 'required',

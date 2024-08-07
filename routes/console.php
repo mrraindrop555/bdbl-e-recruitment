@@ -1,8 +1,19 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use App\Models\Vacancy;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+Schedule::call(function () {
+    date_default_timezone_set('Asia/Thimphu');
+
+    $now = Carbon::now('Asia/Thimphu');
+
+    Vacancy::where('status', 'Open')
+        ->where('closure', 'Auto')
+        ->each(function ($vacancy) use ($now) {
+            if (Carbon::parse($vacancy->close_datetime)->lte($now)) {
+                $vacancy->update(['status' => 'Closed']);
+            }
+        });
+})->everyMinute();

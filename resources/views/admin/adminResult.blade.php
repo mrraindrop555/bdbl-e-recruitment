@@ -1,8 +1,8 @@
 <x-layouts.admin>
     <div class="table-container">
-        <h4>Job vacancy</h4>
+        <h4>Job Result</h4>
         <div style="margin-bottom:20px">
-            Individuals selected for their respective positions have been listed accordingly:
+            Individuals selected for their respective positions have been listed accordingly
         </div>
         <div class="d-flex  mb-4">
             <a href="/admin" class="btn"

@@ -29,6 +29,14 @@ class ApplicationFactory extends Factory
             'class_xii_completion_year' => fake()->numberBetween(1990, 2015),
             'class_xii_marks' => [],
             'class_xii_avg' => 0.0,
+            'university_or_college_name' => fake()->name(),
+            'university_or_college_course_name' => fake()->name(),
+            'university_or_college_completion_year' => fake()->numberBetween(1990, 2015),
+            'university_or_college_percentage' => 0.0,
+            'masters_institution_name' => fake()->name(),
+            'masters_course_name' => fake()->name(),
+            'masters_completion_year' => fake()->numberBetween(1990, 2015),
+            'masters_completion_year' => 0.0,
             'final_score' => fake()->numberBetween(60, 80),
             'is_shortlisted' => false
         ];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\Vacancy;
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,8 @@ class VacancyController extends Controller
     {
         return view('Index', [
             'vacancies' => Vacancy::with('attachment')
-                ->whereNot('status', 'Shortlisted')
+                ->where('status', 'Open')
+                ->whereIn('type', ['External', 'Experience'])
                 ->get()
         ]);
     }
@@ -44,7 +46,7 @@ class VacancyController extends Controller
             'Result',
             [
                 'vacancies' => Vacancy::withCount('applications')
-                    ->where('status', 'Shortlisted')
+                    ->whereNot('status', 'Open')
                     ->get(),
             ]
         );

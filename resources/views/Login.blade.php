@@ -26,7 +26,7 @@
         </div>
         <button type="submit">Login</button>
     </form>
-    <div style="opacity: 0.3; margin-top: 20px;">
+    <div style="opacity: 0.3; margin-top: 20px; user-select: none;">
         BDBL e-Recruitment 2024
     </div>
 </body>

@@ -12,14 +12,15 @@ class AdminApplicationController extends Controller
         return view('admin/adminshortlisted', [
             'vacancy' => $vacancy,
             'applications' => $vacancy->applications()
-                ->orderBy('final_score', 'desc')
+                ->oldest()
+                // ->orderBy('final_score', 'desc')
                 ->get()
         ]);
     }
 
     public function show(Application $application)
     {
-        $application->load(['vacancy']);
+        $application->load(['applicationFiles']);
 
         return view('admin.adminApplication', [
             'application' => $application

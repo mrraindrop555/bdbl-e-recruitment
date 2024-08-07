@@ -17,11 +17,14 @@
 
                             <hr class="mt-0 mb-2">
                             <div class="mb-3 d-flex gap-3">
+                                <span>Type: {{ $vacancy->type }}</span>
+                                <div>|</div>
                                 <span>{{ $vacancy->number_of_slots }} Slots</span>
                                 <div>|</div>
                                 <div>
-                                    Close date:
-                                    {{ $vacancy->close_date }}
+                                    Close datetime:
+                                    {{ date('M j, Y, g:i a', strtotime($vacancy->date_time)) }} <span
+                                        style="opacity: 0.5; user-select: none;">({{ $vacancy->closure }})</span>
                                 </div>
                                 <div>|</div>
                                 <div>
@@ -70,7 +73,8 @@
                             <form class="d-inline" method="POST" action="{{ "/admin/vacancy/{$vacancy->id}" }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" onclick="return confirm('Are you sure you want to delete this?')" class="btn mt-2"
+                                <button type="submit" onclick="return confirm('Are you sure you want to delete this?')"
+                                    class="btn mt-2"
                                     style="background-color:red;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Delete</button>
                             </form>
                             {{-- @if ($vacancy->status != 'Shortlisted')

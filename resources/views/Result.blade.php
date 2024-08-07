@@ -23,13 +23,18 @@
                 @foreach ($vacancies as $vacancy)
                     <tr class="text-center">
                         <td scope="row">{{ $loop->index + 1 }}</td>
-                        <td><x-job-title :vacancy="$vacancy" /></td>
+                        <td>{{ $vacancy->position_title }}</td>
                         <td class="text-center">{{ $vacancy->applications_count }}</td>
                         <td>
                             {{ $vacancy->applications->filter(fn($app) => $app->is_shortlisted)->count() }}
                         </td>
                         <td>
-                            <a href="{{ route('result', [$vacancy->id]) }}" style="text-decoration: none;color:#00ab41">View Result</a>
+                            @if ($vacancy->status == 'Shortlisted')
+                                <a href="{{ route('result', [$vacancy->id]) }}"
+                                    style="text-decoration: none;color:#00ab41">View Result</a>
+                            @else
+                                Pending
+                            @endif
                         </td>
                     </tr>
                 @endforeach

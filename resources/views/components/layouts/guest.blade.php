@@ -23,7 +23,7 @@
     </div>
 
 
-    <div class="text-center mb-3" style="opacity: 0.3;">
+    <div class="text-center mb-3" style="opacity: 0.3; user-select: none;">
         BDBL e-Recruitment 2024
     </div>
 

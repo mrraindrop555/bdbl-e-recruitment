@@ -5,7 +5,13 @@
     <div class="container-fluid px-md-4">
         <a class="navbar-brand d-flex">
             <img src="{{ asset('assets/Logo.png') }}" alt="Bhutan Development Bank Limited" class="logo me-2">
-            <h4 class="d-none d-sm-block my-auto" style="color:white;">BDBL e-Recruitment</h4>
+            <h4 class="d-none d-sm-block my-auto" style="color:white;">
+                @if ($admin)
+                    ADMIN PANEL
+                @else
+                    BDBL e-Recruitment
+                @endif
+            </h4>
         </a>
         @if ($admin)
             <form action="/logout" method="POST" class="d-flex mr-lg-5">

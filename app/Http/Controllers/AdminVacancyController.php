@@ -6,6 +6,7 @@ use App\Models\Application;
 use App\Models\Attachment;
 use App\Models\Vacancy;
 use App\Notifications\ShortlistResult;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -28,10 +29,12 @@ class AdminVacancyController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'type' => 'required',
             'position_title' => 'required',
             'number_of_slots' => 'required|integer',
             'benchmark' => 'required|decimal:0,2',
-            'close_date' => 'required|date',
+            'close_datetime' => 'required|date',
+            'closure' => 'required',
             'employment_type' => 'required|array|min:1',
             'employment_type.*' => 'required',
             'qualifications' => 'required|array|min:1',
@@ -82,10 +85,12 @@ class AdminVacancyController extends Controller
         Gate::allowIf(fn () => $vacancy->status != 'Shortlisted');
 
         $validated = $request->validate([
+            'type' => 'required',
             'position_title' => 'required',
             'number_of_slots' => 'required|integer',
             'benchmark' => 'required|decimal:0,2',
-            'close_date' => 'required|date',
+            'close_datetime' => 'required|date',
+            'closure' => 'required',
             'employment_type' => 'required|array|min:1',
             'employment_type.*' => 'required',
             'qualifications' => 'required|array|min:1',
@@ -98,7 +103,6 @@ class AdminVacancyController extends Controller
         ], [
             'attachment.max' => 'The file must not be greater than 5MB.',
         ]);
-
 
         DB::transaction(function () use ($validated, $request, $vacancy) {
             $vacancy->update([...$request->except(['attachment', 'delete_attachment'])]);

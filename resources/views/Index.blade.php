@@ -17,7 +17,7 @@
                     <th scope="col">Position Title</th>
                     <th scope="col" class="d-none d-md-table-cell">Slot</th>
                     <th class="d-none d-md-table-cell">Employment Type & Grade</th>
-                    <th class="d-none d-md-table-cell">Attachments</th>
+                    <th class="d-none d-md-table-cell">Attachment</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -26,8 +26,8 @@
                 @foreach ($vacancies as $vacancy)
                     <tr>
                         <td scope="row" class="text-center">{{ $loop->index + 1 }}</td>
-                        <td><x-job-title :vacancy="$vacancy" /></td>
-                        <td class="text-center d-none d-md-table-cell" >{{ $vacancy->number_of_slots }}</td>
+                        <td>{{ $vacancy->position_title }}</td>
+                        <td class="text-center d-none d-md-table-cell">{{ $vacancy->number_of_slots }}</td>
                         <td class="d-none d-md-table-cell">
                             <ul>
                                 @foreach ($vacancy->employment_type as $value)
@@ -35,7 +35,7 @@
                                 @endforeach
                             </ul>
                         </td>
-                        <td class="d-none d-md-table-cell">
+                        <td class="d-none d-md-table-cell text-center">
                             @if ($vacancy->attachment)
                                 <a href="{{ $vacancy->attachment->src }}" style="color:#00ab41">Download TOR</a>
                             @else
@@ -50,7 +50,7 @@
                         <td class="text-center">
                             @if ($vacancy->status == 'Open')
                                 <a href="{{ "/vacancy/{$vacancy->id}/apply" }}"
-                                    style="background-color:#00ab41;border:none;color:white;padding:6px 20px;border-radius:2px;font-size: 14px;">Apply</a>
+                                    style="text-decoration: none;background-color:#00ab41;border:none;color:white;padding:6px 20px;border-radius:2px;font-size: 14px;">Apply</a>
                             @endif
                         </td>
                     </tr>

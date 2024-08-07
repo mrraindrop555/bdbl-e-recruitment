@@ -5,14 +5,14 @@
                 <div class="col col-lg-10 mb-4 mb-lg-0">
                     <div class="card mb-3 px-2 px-md-5" style="border-radius: .5rem;">
                         <div class="card-body p-4">
-                            <h6 class="text-dark" style="font-size: 24px;"><x-job-title :vacancy="$vacancy" big /></h6>
+                            <h6 class="text-dark" style="font-size: 24px;">{{ $vacancy->position_title }}</h6>
                             <hr class="mt-0 mb-2">
                             <div class="mb-3 d-flex gap-3">
                                 <span>{{ $vacancy->number_of_slots }} Slots</span>
                                 <div>|</div>
                                 <div>
-                                    Close date:
-                                    {{ $vacancy->close_date }}
+                                    Close datetime:
+                                    {{ date('M j, Y, g:i a', strtotime($vacancy->date_time)) }}
                                 </div>
                                 <div>|</div>
                                 <div>
@@ -55,8 +55,8 @@
                                     @endforeach
                                 </div>
                             </div>
-                            {{-- <a href="{{ "/vacancy/{$vacancy->id}/apply" }}"
-                                style="background-color:#00ab41;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Apply</a> --}}
+                            <a href="{{ "/vacancy/{$vacancy->id}/apply" }}"
+                                style="text-decoration: none;background-color:#00ab41;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Apply</a>
                         </div>
                     </div>
                 </div>

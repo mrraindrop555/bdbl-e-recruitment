@@ -1,6 +1,6 @@
 <x-layouts.admin>
     <div class="table-container">
-        <h4>Job vacancy</h4>
+        <h4>Job Vacancy</h4>
         <div style="margin-bottom:20px">
             The Management of Bhutan Development Bank (BDB) would like to announce vacancy for the position indicated
             below in the table.
@@ -24,9 +24,10 @@
                 <tr class="text-center">
                     <th scope="col">Sl/no</th>
                     <th scope="col">Position Title</th>
+                    <th scope="col">Type</th>
                     <th scope="col">Slot</th>
                     <th scope="col" class="d-none d-md-table-cell">Employment Type & Grade</th>
-                    <th class="d-none d-md-table-cell">Attachments</th>
+                    <th class="d-none d-md-table-cell">Attachment</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -36,6 +37,7 @@
                     <tr>
                         <td scope="row" class="text-center">{{ $loop->index + 1 }}</td>
                         <td><x-job-title :vacancy="$vacancy" /></td>
+                        <td>{{$vacancy->type}}</td>
                         <td class="text-center">{{ $vacancy->number_of_slots }}</td>
                         <td class="d-none d-md-table-cell">
                             <ul>
@@ -44,7 +46,7 @@
                                 @endforeach
                             </ul>
                         </td>
-                        <td class="d-none d-md-table-cell">
+                        <td class="d-none d-md-table-cell text-center">
                             @if ($vacancy->attachment)
                                 <a href="{{ $vacancy->attachment->src }}" style="color:#00ab41">Download TOR</a>
                             @else

@@ -1,0 +1,1 @@
+<span style="color: rgb(255, 27, 27)" class="fw-bold">*</span>
