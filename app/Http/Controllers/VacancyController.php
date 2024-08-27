@@ -10,14 +10,25 @@ use Illuminate\Http\Request;
 
 class VacancyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('Index', [
-            'vacancies' => Vacancy::with('attachment')
-                ->where('status', 'Open')
-                ->whereIn('type', ['External', 'Experience'])
-                ->get()
-        ]);
+        $type = request()->query('type');
+
+        if ($type == 'internal') {
+            return view('Index', [
+                'vacancies' => Vacancy::with('attachment')
+                    ->where('status', 'Open')
+                    ->whereIn('type', ['Internal'])
+                    ->get()
+            ]);
+        } else {
+            return view('Index', [
+                'vacancies' => Vacancy::with('attachment')
+                    ->where('status', 'Open')
+                    ->whereIn('type', ['External', 'Experience', 'Assistant Level'])
+                    ->get()
+            ]);
+        }
     }
 
     public function show(Vacancy $vacancy)
@@ -42,13 +53,28 @@ class VacancyController extends Controller
 
     public function result()
     {
-        return view(
-            'Result',
-            [
-                'vacancies' => Vacancy::withCount('applications')
-                    ->whereNot('status', 'Open')
-                    ->get(),
-            ]
-        );
+        $type = request()->query('type');
+
+        if ($type == 'internal') {
+            return view(
+                'Result',
+                [
+                    'vacancies' => Vacancy::withCount('applications')
+                        ->whereNot('status', 'Open')
+                        ->whereIn('type', ['Internal'])
+                        ->get(),
+                ]
+            );
+        } else {
+            return view(
+                'Result',
+                [
+                    'vacancies' => Vacancy::withCount('applications')
+                        ->whereNot('status', 'Open')
+                        ->whereIn('type', ['External', 'Experience', 'Assistant Level'])
+                        ->get(),
+                ]
+            );
+        }
     }
 }

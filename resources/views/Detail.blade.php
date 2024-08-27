@@ -55,6 +55,38 @@
                                     @endforeach
                                 </div>
                             </div>
+
+                            <hr class="mt-0 mb-4">
+                            <div class="row pt-1">
+                                <div class="col-12 mb-3 text-dark" style="font-size: 14px;line-height:1.5rem">
+                                    <h6 class="text-danger">Required Documents</h6>
+
+                                    <div class="text-danger">
+                                        @if ($vacancy->type == 'External')
+                                            <li>Passport size photo</li>
+                                            <li>Citizenship Identity Card</li>
+                                            <li>Security Clearance Certificate</li>
+                                            <li>Medical Certificate</li>
+                                            <li>CV</li>
+                                            <li>Class X Marksheet</li>
+                                            <li>Class XII Marksheet</li>
+                                            <li>Degree/Diploma/VTI Marksheet</li>
+                                        @elseif ($vacancy->type == 'Internal')
+                                            <li>CV</li>
+                                        @elseif ($vacancy->type == 'Experience')
+                                            <li>Passport size photo</li>
+                                            <li>Citizenship Identity Card</li>
+                                            <li>Security Clearance Certificate</li>
+                                            <li>Medical Certificate</li>
+                                            <li>CV</li>
+                                            <li>NOC ( If already employed )</li>
+                                            <li>Degree/Diploma/VTI Marksheet</li>
+                                            <li>Masters Marksheet</li>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
                             <a href="{{ "/vacancy/{$vacancy->id}/apply" }}"
                                 style="text-decoration: none;background-color:#00ab41;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Apply</a>
                         </div>

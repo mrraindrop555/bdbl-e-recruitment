@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ApplicationExport;
 use App\Models\Application;
 use App\Models\Attachment;
 use App\Models\Vacancy;
@@ -10,6 +11,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use ZanySoft\Zip\Facades\Zip;
 
 class AdminVacancyController extends Controller
 {
@@ -99,13 +103,18 @@ class AdminVacancyController extends Controller
             'salary_and_benefits.*' => 'required',
             'attachment' => 'nullable|file|max:5120',
             'delete_attachment' => 'required',
-            'status' => 'required'
+            'status' => 'required_if:closure,Manual'
         ], [
             'attachment.max' => 'The file must not be greater than 5MB.',
         ]);
 
         DB::transaction(function () use ($validated, $request, $vacancy) {
-            $vacancy->update([...$request->except(['attachment', 'delete_attachment'])]);
+            if ($validated['closure'] == 'Auto') {
+                $vacancy->update([...$request->except(['attachment', 'delete_attachment', 'status'])]);
+            } else {
+                $vacancy->update([...$request->except(['attachment', 'delete_attachment'])]);
+            }
+
             if ($validated['delete_attachment'] === 'true') {
                 $vacancy->attachment?->delete();
             }
@@ -166,5 +175,15 @@ class AdminVacancyController extends Controller
         });
 
         return back()->with('success', 'Shortlisted successfully!');
+    }
+
+    public function export(Vacancy $vacancy)
+    {
+        $path = Storage::path('');
+        // dd("{$path}download.zip");
+        $zip = Zip::create("{$path}download.zip", true);
+        // $zip->close();
+
+        return Excel::download(new ApplicationExport($vacancy), "{$vacancy->position_title} Result.xlsx");
     }
 }

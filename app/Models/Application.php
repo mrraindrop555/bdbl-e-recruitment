@@ -37,16 +37,9 @@ class Application extends Model
     {
         parent::boot();
         self::deleting(function ($application) {
-            $application->passportPhoto?->delete();
-            $application->classXMarksheet?->delete();
-            $application->classXIIMarksheet?->delete();
-            $application->universityOrCollegeMarksheet?->delete();
-            $application->mastersMarksheet?->delete();
-            $application->citizenshipIdentityCard?->delete();
-            $application->securityClearanceCertificate?->delete();
-            $application->medicalCertificate?->delete();
-            $application->cv?->delete();
-            $application->noc?->delete();
+            $application->applicationFiles->each(function (ApplicationFile $file) {
+                $file->delete();
+            });
         });
     }
 }

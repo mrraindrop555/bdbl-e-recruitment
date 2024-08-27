@@ -19,6 +19,9 @@ Route::post('/vacancy/{vacancy}/applicaiton', [ApplicationController::class, 'st
 Route::get('/result', [VacancyController::class, 'result']);
 Route::get('/result/{vacancy}', [ApplicationController::class, 'index'])->name('result');
 
+Route::get('/resubmission/{application}', [ApplicationController::class, 'showResubmissionForm']);
+
+
 Route::get('/detail', function () {
     return view('Detail');
 });
@@ -53,4 +56,5 @@ Route::prefix('admin')
         Route::get('/result/{vacancy}', [AdminApplicationController::class, 'index']);
         Route::get('/application/{application}', [AdminApplicationController::class, 'show']);
         Route::post('/vacancy/{vacancy}/shortlist', [AdminVacancyController::class, 'shortlist']);
+        Route::get('/vacancy/{vacancy}/download', [AdminVacancyController::class, 'export']);
     });

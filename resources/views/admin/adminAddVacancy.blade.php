@@ -21,6 +21,10 @@
                                 <input type="radio" value="Internal" name="type"
                                     @if (old('type') == 'Internal') checked @endif>Internal
                             </div>
+                            <div>
+                                <input type="radio" value="Assistant Level" name="type"
+                                    @if (old('type') == 'Assistant Level') checked @endif>Assistant Level
+                            </div>
                         </div>
                         @error('type')
                             <div class="text-danger">{{ $message }}</div>
@@ -43,8 +47,8 @@
                                     <option>Manual</option>
                                 </select>
                             </span>
-                            <input type="datetime-local" step="any" name="close_datetime" value="{{ old('close_datetime') }}"
-                                class="form-control" id="closeDate">
+                            <input type="datetime-local" step="any" name="close_datetime"
+                                value="{{ old('close_datetime') }}" class="form-control" id="closeDate">
                         </div>
                         @error('close_datetime')
                             <div class="text-danger">{{ $message }}</div>

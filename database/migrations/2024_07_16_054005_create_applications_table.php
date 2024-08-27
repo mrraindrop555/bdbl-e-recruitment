@@ -19,6 +19,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
 
+            $table->string('present_position')->nullable();
+            $table->string('present_division')->nullable();
+            $table->double('number_of_years_served')->nullable();
+            $table->string('reason')->nullable();
+
             $table->string('class_x_school_name')->nullable();
             $table->year('class_x_completion_year')->nullable();
             $table->json('class_x_marks')->nullable();
@@ -34,11 +39,16 @@ return new class extends Migration
             $table->string('university_or_college_course_name')->nullable();
             $table->year('university_or_college_completion_year')->nullable();
             $table->double('university_or_college_percentage')->nullable();
+            $table->boolean('degree_completed')->nullable();
 
             $table->string('masters_institution_name')->nullable();
             $table->string('masters_course_name')->nullable();
             $table->year('masters_completion_year')->nullable();
             $table->double('masters_percentage')->nullable();
+
+            $table->text('rejection_remarks')->nullable();
+            $table->string('resubmission_token')->nullable();
+            $table->timestamp('resubmission_expires_at')->nullable();
 
             $table->double('final_score')->nullable();
 

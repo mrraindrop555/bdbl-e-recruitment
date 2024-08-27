@@ -23,7 +23,7 @@ return new class extends Migration
             $table->json('employment_type');
             $table->json('qualifications');
             $table->json('salary_and_benefits');
-            $table->enum('type', ["Internal", "External", "Experience"]);
+            $table->enum('type', ["Internal", "External", "Experience", "Assistant Level"]);
             $table->enum('status', ["Open", "Closed", "Shortlisted"]);
         });
     }

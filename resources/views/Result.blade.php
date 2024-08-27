@@ -5,7 +5,10 @@
             Individuals selected for their respective positions have been listed accordingly.
         </div>
         <div class="d-flex  mb-4">
-            <a href="/" class="btn"
+            @php
+                $type = request()->query('type');
+            @endphp
+            <a href="{{$type == 'internal' ? '/vacancy?type=internal' : '/vacancy'}}" class="btn"
                 style="background-color:#00ab41;border:none;color:white;padding:7px 40px;border-radius:2px">View
                 Vacancies</a>
         </div>
@@ -30,7 +33,7 @@
                         </td>
                         <td>
                             @if ($vacancy->status == 'Shortlisted')
-                                <a href="{{ route('result', [$vacancy->id]) }}"
+                                <a href="{{$type == 'internal' ? "/result/{$vacancy->id}?type=internal" : "/result/{$vacancy->id}"}}"
                                     style="text-decoration: none;color:#00ab41">View Result</a>
                             @else
                                 Pending

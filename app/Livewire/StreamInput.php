@@ -10,6 +10,7 @@ class StreamInput extends Component
     public $marks = [];
     public $average = null;
     public $disabled = false;
+    public $disabled_stream = false;
 
     public function change()
     {

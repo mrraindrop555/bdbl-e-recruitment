@@ -17,7 +17,7 @@ class ApplicationController extends Controller
 {
     public function index(Vacancy $vacancy)
     {
-        if($vacancy->status != 'Shortlisted'){
+        if ($vacancy->status != 'Shortlisted') {
             abort(403);
         }
 
@@ -29,49 +29,17 @@ class ApplicationController extends Controller
         ]);
     }
 
-    public function store(Request $request, Vacancy $vacancy)
-    {
-        if($vacancy->status != 'Open'){
+    public function showResubmissionForm(Request $request, Application $application)
+    {   
+        if ($application->resubmission_token != $request->query('token') || $application->resubmission_expires_at < now() || $application->vacancy->status != 'Open') {
             abort(403);
         }
 
-        $validated = $request->validate([
-            'name' => 'required',
-            'cid' => ['required', 'integer', Rule::unique('applications', 'cid')->where(function ($query) use ($vacancy) {
-                return $query->where('vacancy_id', $vacancy->id);
-            })],
-            'email' => 'required|email',
-            'class_x_school_name' => 'required',
-            'class_x_completion_year' => 'required',
-            'class_x_marksheet' => 'required|file|max:5120',
-            'class_x_marks' => 'required',
-            'class_x_avg' => 'required|decimal:0,2',
-            'class_xii_school_name' => 'required',
-            'class_xii_stream' => 'required',
-            'class_xii_completion_year' => 'required',
-            'class_xii_marksheet' => 'required|file|max:5120',
-            'class_xii_marks' => 'required',
-            'class_xii_avg' => 'required|decimal:0,2',
-            'final_score' => 'required|decimal:0,2',
+        $application->load(['applicationFiles']);
+
+        return view('admin.adminApplication', [
+            'application' => $application,
+            'is_resubmission' => true
         ]);
-
-        DB::transaction(function () use ($validated, $vacancy, $request) {
-            $application = new Application([...$request->except(['class_x_marksheet', 'class_xii_marksheet']), 'is_shortlisted' => false]);
-            $vacancy->applications()->save($application);
-
-            if ($request->hasFile('class_x_marksheet')) {
-                $path = $validated['class_x_marksheet']->store('attachments', 'public');
-                $application->classXMarksheet()->save(new Attachment(['filename' => $path]));
-            }
-
-            if ($request->hasFile('class_xii_marksheet')) {
-                $path = $validated['class_xii_marksheet']->store('attachments', 'public');
-                $application->classXIIMarksheet()->save(new Attachment(['filename' => $path]));
-            }
-
-            Notification::send(User::all(), new VacancyApplied($application));
-        });
-
-        return redirect('/vacancy')->with('success', 'Applied successfully!');
     }
 }
