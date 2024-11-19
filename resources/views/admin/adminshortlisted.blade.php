@@ -22,12 +22,27 @@
                         $sort = request()->query('sort');
                     @endphp
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" href="?sort=date_asc">Date ascending @if(!$sort || $sort == 'date_asc') <x-check/> @endif</a></li>
-                        <li><a class="dropdown-item" href="?sort=date_dsc">Date descending @if($sort == 'date_dsc') <x-check/> @endif</a></li>
-                        @if ($vacancy->type != 'Internal')
-                            <li><a class="dropdown-item" href="?sort=marks_asc">Marks ascending @if($sort == 'marks_asc') <x-check/> @endif</a></li>
-                            <li><a class="dropdown-item" href="?sort=marks_dsc">Marks descending @if($sort == 'marks_dsc') <x-check/> @endif</a></li>
-                        @endif
+                        <li><a class="dropdown-item" href="?sort=date_asc">Date ascending @if (!$sort || $sort == 'date_asc')
+                                    <x-check />
+                                @endif
+                            </a>
+                        </li>
+                        <li><a class="dropdown-item" href="?sort=date_dsc">Date descending @if ($sort == 'date_dsc')
+                                    <x-check />
+                                @endif
+                            </a>
+                        </li>
+                        {{-- @if ($vacancy->type != 'Internal') --}}
+                        <li><a class="dropdown-item" href="?sort=marks_asc">Marks ascending @if ($sort == 'marks_asc')
+                                    <x-check />
+                                @endif
+                            </a>
+                        </li>
+                        <li><a class="dropdown-item" href="?sort=marks_dsc">Marks descending @if ($sort == 'marks_dsc')
+                                    <x-check />
+                                @endif
+                            </a></li>
+                        {{-- @endif --}}
                     </ul>
                 </div>
             </div>
@@ -54,12 +69,12 @@
                     <th scope="col">Name</th>
                     <th scope="col">CID</th>
                     <th scope="col">Applied on</th>
-                    @if ($vacancy->type != 'Internal')
-                        <th scope="col">Mark Secured
-                            <br>
-                            <x-gray>Benchmark: {{ $vacancy->benchmark }}</x-gray>
-                        </th>
-                    @endif
+                    {{-- @if ($vacancy->type != 'Internal') --}}
+                    <th scope="col">Mark Secured
+                        <br>
+                        <x-gray>Benchmark: {{ $vacancy->benchmark }}</x-gray>
+                    </th>
+                    {{-- @endif --}}
                     @if ($vacancy->status != 'Open')
                         <th scope="col"></th>
                     @endif
@@ -73,9 +88,9 @@
                         <td>{{ $application->name }}</td>
                         <td>{{ $application->cid }}</td>
                         <td>{{ $application->created_at->format('d M Y, h:i A') }}</td>
-                        @if ($vacancy->type != 'Internal')
-                            <td class="text-center">{{ $application->final_score }}</td>
-                        @endif
+                        {{-- @if ($vacancy->type != 'Internal') --}}
+                        <td class="text-center">{{ $application->final_score }}</td>
+                        {{-- @endif --}}
                         <td>
                             <a href="{{ "/admin/application/{$application->id}" }}"
                                 style="text-decoration: none;color:#00ab41">View
@@ -85,7 +100,7 @@
                             <td>
                                 @if ($vacancy->status == 'Closed')
                                     <input type="checkbox" name="shortlisted[]" value="{{ $application->id }}"
-                                        @if ($vacancy->type != 'Internal' && $application->final_score >= $vacancy->benchmark) checked @endif style="margin-right: 10px;">
+                                        @if ($application->final_score >= $vacancy->benchmark) checked @endif style="margin-right: 10px;">
                                 @elseif ($vacancy->status == 'Shortlisted' && $application->is_shortlisted)
                                     <span class='text-secondary fw-bold'>Shortlisted</span>
                                 @endif

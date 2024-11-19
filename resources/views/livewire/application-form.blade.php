@@ -77,7 +77,7 @@
                     @enderror
                 </div>
                 <div class="form-floating flex-grow-1">
-                    <input wire:model="email" type="email" autocomplete="off" class="form-control" id="floatingEmail"
+                    <input wire:model="email" type="text" autocomplete="off" class="form-control" id="floatingEmail"
                         placeholder="example@email.com" @if (!(!$application || $state == 'editing' || $is_resubmission)) disabled @endif>
                     <label for="floatingEmail">Email<x-required /></label>
                     @error('email')
@@ -85,6 +85,45 @@
                     @enderror
                 </div>
             </div>
+
+            @if ($vacancy->type == 'Internal')
+                <div class="card-body d-flex flex-column flex-md-row gap-3">
+                    <div class="form-floating flex-grow-1">
+                        <input wire:model="present_position" type="text" class="form-control" id="floatingPP"
+                            placeholder="------------" @if (!(!$application || $state == 'editing' || $is_resubmission)) disabled @endif>
+                        <label for="floatingPP">Present Position<x-required /></label>
+                        @error('present_position')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-floating flex-grow-1">
+                        <input wire:model="present_division" type="text" class="form-control" id="floatingPD"
+                            placeholder="------------" @if (!(!$application || $state == 'editing' || $is_resubmission)) disabled @endif>
+                        <label for="floatingPD">Present Division<x-required /></label>
+                        @error('present_division')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-floating flex-grow-1">
+                        <input wire:model="number_of_years_served" type="number" autocomplete="off"
+                            class="form-control" id="floatingNY" placeholder="example@email.com"
+                            @if (!(!$application || $state == 'editing' || $is_resubmission)) disabled @endif>
+                        <label for="floatingNT">Number of years served<x-required /></label>
+                        @error('number_of_years_served')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="card-body">
+                    <label for="reason" class="display-block">Reason</label>
+                    <textarea wire:model="reason" id="reason" data-gramm="false" class="form-control" rows="3"
+                        @if (!(!$application || $state == 'editing' || $is_resubmission)) disabled @endif></textarea>
+                    @error('reason')
+                        <span class="error text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            @endif
+
             <div class="card-body row">
                 {{-- <livewire:photo-input name="" title="Passport Size Photo" ratio="9:7" />
                      --}}
@@ -122,8 +161,8 @@
                 @endif
 
                 <div class="col-md-8 mt-5 mt-md-0">
+                    <x-gray>Accepted formats: pdf,jpeg,png,jpg</x-gray>
                     @if ($vacancy->type != 'Internal')
-                        <x-gray>Accepted formats: pdf,jpeg,png,jpg</x-gray>
                         <div class="mb-5">
                             <label class="form-label">Valid Citizenship Identity Card<x-required /></label>
                             @if ($application)
@@ -142,8 +181,8 @@
                                     @endif
                                 </div>
                             @else
-                                <input wire:model="citizenship_identity_card" class="form-control mb-3" id="photo"
-                                    type="file">
+                                <input wire:model="citizenship_identity_card" class="form-control mb-3"
+                                    id="photo" type="file">
                             @endif
 
                             @error('citizenship_identity_card')
@@ -203,30 +242,56 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                    @endif
 
-                    <div @class(['mb-5', 'w-50' => $vacancy->type == 'Internal'])>
-                        <label class="form-label">CV<x-required /></label>
-                        @if ($application)
-                            <div>
-                                @if ($application->applicationFiles->where('type', 'cv')->first())
-                                    <a href="{{ $application->applicationFiles->where('type', 'cv')->first()->src }}"
-                                        style="color:#00ab41">File Link</a>
-                                @else
-                                    <x-gray>No Attachment</x-gray>
-                                @endif
-                                @if ($is_resubmission)
-                                    <x-gray>(Add to replace file)</x-gray>
-                                    <input wire:model="cv" class="form-control mb-3" id="photo" type="file">
-                                @endif
-                            </div>
-                        @else
-                            <input wire:model="cv" class="form-control mb-3" id="photo" type="file">
-                        @endif
-                        @error('cv')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div @class(['mb-5'])>
+                            <label class="form-label">CV<x-required /></label>
+                            @if ($application)
+                                <div>
+                                    @if ($application->applicationFiles->where('type', 'cv')->first())
+                                        <a href="{{ $application->applicationFiles->where('type', 'cv')->first()->src }}"
+                                            style="color:#00ab41">File Link</a>
+                                    @else
+                                        <x-gray>No Attachment</x-gray>
+                                    @endif
+                                    @if ($is_resubmission)
+                                        <x-gray>(Add to replace file)</x-gray>
+                                        <input wire:model="cv" class="form-control mb-3" id="photo"
+                                            type="file">
+                                    @endif
+                                </div>
+                            @else
+                                <input wire:model="cv" class="form-control mb-3" id="photo" type="file">
+                            @endif
+                            @error('cv')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    @else
+                        <div @class(['mb-5', 'w-50'])>
+                            <label class="form-label">Recommendation Letter from Supervisor<x-required /></label>
+                            @if ($application)
+                                <div>
+                                    @if ($application->applicationFiles->where('type', 'supervisor_recommendation_letter')->first())
+                                        <a href="{{ $application->applicationFiles->where('type', 'supervisor_recommendation_letter')->first()->src }}"
+                                            style="color:#00ab41">File Link</a>
+                                    @else
+                                        <x-gray>No Attachment</x-gray>
+                                    @endif
+                                    @if ($is_resubmission)
+                                        <x-gray>(Add to replace file)</x-gray>
+                                        <input wire:model="supervisor_recommendation_letter" class="form-control mb-3"
+                                            id="letter" type="file">
+                                    @endif
+                                </div>
+                            @else
+                                <input wire:model="supervisor_recommendation_letter" class="form-control mb-3"
+                                    id="letter" type="file">
+                            @endif
+                            @error('supervisor_recommendation_letter')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    @endif
 
                     @if ($vacancy->type == 'Experience')
                         <div>
@@ -242,12 +307,12 @@
                                     @endif
                                     @if ($is_resubmission)
                                         <x-gray>(Add to replace file)</x-gray>
-                                        <input wire:model="noc" class="form-control mb-3" id="photo"
+                                        <input wire:model="noc" class="form-control mb-3" id="noc"
                                             type="file">
                                     @endif
                                 </div>
                             @else
-                                <input wire:model="noc" class="form-control mb-3" id="photo" type="file">
+                                <input wire:model="noc" class="form-control mb-3" id="noc" type="file">
                             @endif
                             @error('noc')
                                 <div class="text-danger">{{ $message }}</div>
@@ -263,8 +328,10 @@
         'd-none' => !(
             ($application && $vacancy->type == 'External') ||
             ($application && $vacancy->type == 'Assistant Level') ||
+            ($application && $vacancy->type == 'Internal') ||
             (!$application &&
                 ($vacancy->type == 'External' ||
+                    $vacancy->type == 'Internal' ||
                     $vacancy->type == 'Assistant Level') &&
                 $current_page == 2)
         ),
@@ -346,9 +413,11 @@
         'd-none' => !(
             ($application && $vacancy->type == 'External') ||
             ($application && $vacancy->type == 'Assistant Level') ||
+            ($application && $vacancy->type == 'Internal') ||
             (!$application &&
                 ($vacancy->type == 'External' ||
-                    $vacancy->type == 'Assistant Level') &&
+                    $vacancy->type == 'Assistant Level' ||
+                    $vacancy->type == 'Internal') &&
                 $current_page == 3)
         ),
     ])>
@@ -424,10 +493,11 @@
 
     <div @class([
         'd-none' => !(
-            ($application && $vacancy->type != 'Internal') ||
+            $application ||
             (!$application &&
                 ($vacancy->type == 'External' ||
-                    $vacancy->type == 'Assistant Level') &&
+                    $vacancy->type == 'Assistant Level' ||
+                    $vacancy->type == 'Internal') &&
                 $current_page == 4) ||
             (!$application && $vacancy->type == 'Experience' && $current_page == 2)
         ),
@@ -435,12 +505,12 @@
         <div class="card" style="margin-bottom: 20px;">
             <h5 class="card-header bg-white">Degree/Diploma/VTI Details</h5>
             <div class="card-body">
-                @if ($vacancy->type == 'Assistant Level')
+                @if ($vacancy->type == 'Assistant Level' || $vacancy->type == 'Internal')
                     <div class="mb-4">
                         <input wire:model.live="degree_completed" type="checkbox" wire:change="onPercentageChanged"
                             @if (!(!$application || $state == 'editing' || $is_resubmission)) disabled @endif
                             @if ($application && $degree_completed) checked @endif>
-                        Degree Completed {{ $degree_completed }}
+                        Degree Completed
                     </div>
                 @endif
                 <div class="d-flex flex-column flex-md-row gap-3 mb-3">
@@ -457,7 +527,7 @@
                                             !$application ||
                                             ($state == 'editing' && $degree_completed) ||
                                             (($is_resubmission && $vacancy->type == 'Experience') ||
-                                                ($is_resubmission && $vacancy->type == 'Assistant Level' && $degree_completed))
+                                                ($is_resubmission && $vacancy->type == 'Assistant Level' && $degree_completed) || ($is_resubmission && $vacancy->type == 'Internal' && $degree_completed))
                                         )) disabled @endif>
                             <label>University/College Name<x-required /></label>
                         @endif
@@ -477,7 +547,7 @@
                                             !$application ||
                                             ($state == 'editing' && $degree_completed) ||
                                             (($is_resubmission && $vacancy->type == 'Experience') ||
-                                                ($is_resubmission && $vacancy->type == 'Assistant Level' && $degree_completed))
+                                                ($is_resubmission && $vacancy->type == 'Assistant Level' && $degree_completed) || ($is_resubmission && $vacancy->type == 'Internal' && $degree_completed))
                                         )) disabled @endif>
                         @endif
                         <label>Course Name<x-required /></label>
@@ -499,7 +569,7 @@
                                             !$application ||
                                             ($state == 'editing' && $degree_completed) ||
                                             (($is_resubmission && $vacancy->type == 'Experience') ||
-                                                ($is_resubmission && $vacancy->type == 'Assistant Level' && $degree_completed))
+                                                ($is_resubmission && $vacancy->type == 'Assistant Level' && $degree_completed) || ($is_resubmission && $vacancy->type == 'Internal' && $degree_completed))
                                         )) disabled @endif>
                         @endif
                         <label>Completion Year<x-required /></label>
@@ -524,7 +594,7 @@
                                             !$application ||
                                             ($state == 'editing' && $degree_completed) ||
                                             (($is_resubmission && $vacancy->type == 'Experience') ||
-                                                ($is_resubmission && $vacancy->type == 'Assistant Level' && $degree_completed))
+                                                ($is_resubmission && $vacancy->type == 'Assistant Level' && $degree_completed) || ($is_resubmission && $vacancy->type == 'Internal' && $degree_completed))
                                         )) disabled @endif>
                         @endif
                         @error('university_or_college_percentage')
@@ -563,7 +633,7 @@
             </div>
         </div>
 
-        @if ($vacancy->type == 'External' || $vacancy->type == 'Assistant Level')
+        @if ($vacancy->type == 'External' || $vacancy->type == 'Assistant Level' || $vacancy->type == 'Internal')
             <div class="card text-center">
                 <div class="card-header bg-white">
                     Final Score <span style="opacity: 0.5; user-select: none;">
@@ -691,15 +761,15 @@
             @if ($current_page == $last_page)
                 <div wire:loading class="spinner-border text-success" role="status">
                 </div>
-                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#agreeModal"
                     style="background-color:#00ab41;border:none;color:white;padding:7px 40px;border-radius:2px;">Submit</button>
                 <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                <div class="modal fade" id="agreeModal" tabindex="-1" aria-labelledby="agreeModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Terms and Conditions</h5>
+                                <h5 class="modal-title" id="agreeModalLabel">Terms and Conditions</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -763,19 +833,18 @@
             <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#rejectModal"
                 style="background-color:red;border:none;color:white;padding:7px 40px;border-radius:2px;">Reject
                 Application</button>
-            <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="agreeModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Reject Application</h5>
+                            <h5 class="modal-title" id="agreeModalLabel">Reject Application</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <label for="exampleFormControlTextarea1" class="form-label">Remarks</label>
                             <textarea wire:model="rejection_remarks" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-
                         </div>
                         <div class="modal-footer">`
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

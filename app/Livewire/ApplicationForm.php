@@ -34,6 +34,10 @@ class ApplicationForm extends Component
     public $medical_certificate;
     public $cv;
     public $noc;
+    public $present_position;
+    public $present_division;
+    public $number_of_years_served;
+    public $reason;
     public $supervisor_recommendation_letter;
     public $class_x_school_name;
     public $class_x_completion_year;
@@ -102,7 +106,7 @@ class ApplicationForm extends Component
                     return $query->where('vacancy_id', $this->vacancy->id);
                 })],
                 'email' => 'required|email',
-                'present_poisition' => 'required',
+                'present_position' => 'required',
                 'present_division' => 'required',
                 'number_of_years_served' => 'required|numeric',
                 'reason' => 'required',
@@ -137,6 +141,7 @@ class ApplicationForm extends Component
                 'university_or_college_completion_year' => 'required_if:degree_completed,true',
                 'university_or_college_percentage' => 'required_if:degree_completed,true',
                 'university_or_college_marksheet' => 'required_if:degree_completed,true|nullable|mimes:pdf,jpeg,png,jpg|max:1024',
+                'final_score' => 'required|decimal:0,2|min:0|max:100',
             ],
             "degree_experience" => [
                 'university_or_college_name' => 'required',
@@ -190,7 +195,7 @@ class ApplicationForm extends Component
                     return $query->where('vacancy_id', $this->vacancy->id);
                 })],
                 'email' => 'required|email',
-                'present_poisition' => 'required',
+                'present_position' => 'required',
                 'present_division' => 'required',
                 'number_of_years_served' => 'required|numeric',
                 'reason' => 'required',
@@ -252,7 +257,7 @@ class ApplicationForm extends Component
             } elseif ($this->vacancy->type == 'Experience') {
                 $page_validations = [$vs['personal_details_experience'], $vs['degree_experience'], $vs['masters']];
             } elseif ($this->vacancy->type == 'Internal') {
-                $page_validations = [$vs['personal_details_internal']];
+                $page_validations = [$vs['personal_details_internal'], $vs['class_x'], $vs['class_xii'], $vs['degree_assistant_level']];
             } elseif ($this->vacancy->type == 'Assistant Level') {
                 $page_validations = [$vs['personal_details'], $vs['class_x'], $vs['class_xii'], $vs['degree_assistant_level']];
             }
@@ -276,7 +281,7 @@ class ApplicationForm extends Component
         }
 
         if ($this->vacancy->type == 'Internal') {
-            $this->last_page = 1;
+            $this->last_page = 4;
         } else if ($this->vacancy->type == 'External') {
             $this->last_page = 4;
         } else if ($this->vacancy->type == 'Experience') {
@@ -291,6 +296,10 @@ class ApplicationForm extends Component
         $this->name = $this->application->name;
         $this->cid = $this->application->cid;
         $this->email = $this->application->email;
+        $this->present_position = $this->application->present_position;
+        $this->present_division = $this->application->present_division;
+        $this->number_of_years_served = $this->application->number_of_years_served;
+        $this->reason = $this->application->reason;
         $this->class_x_school_name = $this->application->class_x_school_name;
         $this->class_x_completion_year = $this->application->class_x_completion_year;
         $this->class_x_marks = $this->application->class_x_marks;
@@ -329,6 +338,7 @@ class ApplicationForm extends Component
                 'medical_certificate',
                 'cv',
                 'noc',
+                'supervisor_recommendation_letter',
                 'class_x_marksheet',
                 'class_xii_marksheet',
                 'university_or_college_marksheet',
@@ -343,57 +353,16 @@ class ApplicationForm extends Component
             ]), 'is_shortlisted' => false]);
             $this->vacancy->applications()->save($application);
 
-            if ($this->vacancy->type != 'Internal') {
-                $path = $this->passport_photo->store('applicationFiles', 'public');
-                $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'passport_photo']));
-
-                $path = $this->citizenship_identity_card->store('applicationFiles', 'public');
-                $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'citizenship_identity_card']));
-
-                $path = $this->security_clearance_certificate->store('applicationFiles', 'public');
-                $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'security_clearance_certificate']));
-
-                $path = $this->medical_certificate->store('applicationFiles', 'public');
-                $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'medical_certificate']));
-            }
-
-            $path = $this->cv->store('applicationFiles', 'public');
-            $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'cv']));
-
-            if ($this->vacancy->type == 'Experience' && $this->noc) {
-                $path = $this->noc->store('applicationFiles', 'public');
-                $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'noc']));
-            }
-
-            if ($this->vacancy->type == 'External') {
-                $path = $this->class_x_marksheet->store('applicationFiles', 'public');
-                $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'class_x_marksheet']));
-            }
-
-            if ($this->vacancy->type == 'External') {
-                $path = $this->class_xii_marksheet->store('applicationFiles', 'public');
-                $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'class_xii_marksheet']));
-            }
-
-            if ($this->vacancy->type != 'Internal') {
-                if ($this->vacancy->type == 'Assistant Level' && $this->degree_completed) {
-                    $path = $this->university_or_college_marksheet->store('applicationFiles', 'public');
-                    $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'university_or_college_marksheet']));
-                } else if ($this->vacancy->type != 'Assistant Level') {
-                    $path = $this->university_or_college_marksheet->store('applicationFiles', 'public');
-                    $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'university_or_college_marksheet']));
-                }
-            }
-
-            if ($this->vacancy->type == 'Experience') {
-                $path = $this->masters_marksheet->store('applicationFiles', 'public');
-                $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'masters_marksheet']));
-            }
+            $this->save_files($application);
 
             Notification::send(User::all(), new VacancyApplied($application));
         });
 
-        return redirect('/vacancy')->with('success', 'Applied successfully!');
+        if ($this->vacancy->type = 'Internal') {
+            return redirect('/vacancy?type=internal')->with('success', 'Applied successfully!');
+        } else {
+            return redirect('/vacancy')->with('success', 'Applied successfully!');
+        }
     }
 
     public function edit()
@@ -431,6 +400,24 @@ class ApplicationForm extends Component
                     'name' => $this->name,
                     'cid' => $this->cid,
                     'email' => $this->email,
+                    'present_position' => $this->present_position,
+                    'present_division' => $this->present_division,
+                    'number_of_years_served' => $this->number_of_years_served,
+                    'reason' => $this->reason,
+                    'class_x_school_name' => $this->class_x_school_name,
+                    'class_x_completion_year' => $this->class_x_completion_year,
+                    'class_x_marks' => $this->class_x_marks,
+                    'class_x_avg' => $this->class_x_avg,
+                    'class_xii_school_name' => $this->class_xii_school_name,
+                    'class_xii_completion_year' => $this->class_xii_completion_year,
+                    'class_xii_marks' => $this->class_xii_marks,
+                    'class_xii_avg' => $this->class_xii_avg,
+                    'degree_completed' => $this->degree_completed,
+                    'university_or_college_name' => $this->university_or_college_name,
+                    'university_or_college_course_name' => $this->university_or_college_course_name,
+                    'university_or_college_completion_year' => $this->university_or_college_completion_year,
+                    'university_or_college_percentage' => $this->university_or_college_percentage,
+                    'final_score' => $this->final_score,
                 ]);
             } else if ($this->vacancy->type == 'Experience') {
                 $this->application->update([
@@ -470,7 +457,7 @@ class ApplicationForm extends Component
             }
 
             if ($this->is_resubmission) {
-                $this->save_files();
+                $this->save_files($this->application);
 
                 $this->application->update([
                     'rejection_remarks' => null,
@@ -483,7 +470,11 @@ class ApplicationForm extends Component
         });
 
         if ($this->is_resubmission) {
-            return redirect("/vacancy")->with('success', 'Application resubmitted successfully!');
+            if ($this->vacancy->type = 'Internal') {
+                return redirect('/vacancy?type=internal')->with('success', 'Application resubmitted successfully!');
+            } else {
+                return redirect('/vacancy')->with('success', 'Application resubmitted successfully!');
+            }
         } else {
             return redirect("/admin/result/{$this->vacancy->id}")->with('success', 'Application edited successfully!');
         }
@@ -510,57 +501,57 @@ class ApplicationForm extends Component
         return redirect("/admin/result/{$this->vacancy->id}")->with('success', 'Application Rejected');
     }
 
-    public function save_files()
+    public function save_files(Application $application)
     {
         if ($this->passport_photo) {
             $path = $this->passport_photo->store('applicationFiles', 'public');
-            $this->application->applicationFiles->where('type', 'passport_photo')->first()?->delete();
-            $this->application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'passport_photo']));
+            $application->applicationFiles->where('type', 'passport_photo')->first()?->delete();
+            $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'passport_photo']));
         }
         if ($this->citizenship_identity_card) {
             $path = $this->citizenship_identity_card->store('applicationFiles', 'public');
-            $this->application->applicationFiles->where('type', 'citizenship_identity_card')->first()?->delete();
-            $this->application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'citizenship_identity_card']));
+            $application->applicationFiles->where('type', 'citizenship_identity_card')->first()?->delete();
+            $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'citizenship_identity_card']));
         }
         if ($this->medical_certificate) {
             $path = $this->medical_certificate->store('applicationFiles', 'public');
-            $this->application->applicationFiles->where('type', 'medical_certificate')->first()?->delete();
-            $this->application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'medical_certificate']));
+            $application->applicationFiles->where('type', 'medical_certificate')->first()?->delete();
+            $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'medical_certificate']));
         }
         if ($this->cv) {
             $path = $this->cv->store('applicationFiles', 'public');
-            $this->application->applicationFiles->where('type', 'cv')->first()?->delete();
-            $this->application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'cv']));
+            $application->applicationFiles->where('type', 'cv')->first()?->delete();
+            $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'cv']));
         }
         if ($this->supervisor_recommendation_letter) {
             $path = $this->supervisor_recommendation_letter->store('applicationFiles', 'public');
-            $this->application->applicationFiles->where('type', 'supervisor_recommendation_letter')->first()?->delete();
-            $this->application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'supervisor_recommendation_letter']));
+            $application->applicationFiles->where('type', 'supervisor_recommendation_letter')->first()?->delete();
+            $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'supervisor_recommendation_letter']));
         }
         if ($this->noc) {
             $path = $this->noc->store('applicationFiles', 'public');
-            $this->application->applicationFiles->where('type', 'noc')->first()?->delete();
-            $this->application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'noc']));
+            $application->applicationFiles->where('type', 'noc')->first()?->delete();
+            $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'noc']));
         }
         if ($this->class_x_marksheet) {
             $path = $this->class_x_marksheet->store('applicationFiles', 'public');
-            $this->application->applicationFiles->where('type', 'class_x_marksheet')->first()?->delete();
-            $this->application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'class_x_marksheet']));
+            $application->applicationFiles->where('type', 'class_x_marksheet')->first()?->delete();
+            $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'class_x_marksheet']));
         }
         if ($this->class_xii_marksheet) {
             $path = $this->class_xii_marksheet->store('applicationFiles', 'public');
-            $this->application->applicationFiles->where('type', 'class_xii_marksheet')->first()?->delete();
-            $this->application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'class_xii_marksheet']));
+            $application->applicationFiles->where('type', 'class_xii_marksheet')->first()?->delete();
+            $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'class_xii_marksheet']));
         }
         if ($this->university_or_college_marksheet) {
             $path = $this->university_or_college_marksheet->store('applicationFiles', 'public');
-            $this->application->applicationFiles->where('type', 'university_or_college_marksheet')->first()?->delete();
-            $this->application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'university_or_college_marksheet']));
+            $application->applicationFiles->where('type', 'university_or_college_marksheet')->first()?->delete();
+            $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'university_or_college_marksheet']));
         }
         if ($this->masters_marksheet) {
             $path = $this->masters_marksheet->store('applicationFiles', 'public');
-            $this->application->applicationFiles->where('type', 'masters_marksheet')->first()?->delete();
-            $this->application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'masters_marksheet']));
+            $application->applicationFiles->where('type', 'masters_marksheet')->first()?->delete();
+            $application->applicationFiles()->save(new ApplicationFile(['filename' => $path, 'type' => 'masters_marksheet']));
         }
     }
 
@@ -601,7 +592,7 @@ class ApplicationForm extends Component
             } else {
                 $this->final_score = null;
             }
-        } else if ($this->vacancy->type == 'Assistant Level') {
+        } else if ($this->vacancy->type == 'Assistant Level' || $this->vacancy->type == 'Internal') {
             if ($this->degree_completed) {
                 if ($this->class_x_avg && $this->class_xii_avg && $this->university_or_college_percentage) {
                     $this->final_score = round(($this->class_x_avg * 30 + $this->class_xii_avg * 30 + $this->university_or_college_percentage * 40) / 100, 2);

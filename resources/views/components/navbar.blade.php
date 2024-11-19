@@ -14,7 +14,12 @@
                 @if ($admin)
                     ADMIN PANEL
                 @else
-                    BDBL e-Recruitment
+                    @php
+                        $type = request()->query('type');
+                    @endphp
+                    BDBL e-Recruitment @if ($type == 'internal')
+                        Internal
+                    @endif
                 @endif
             </h4>
         </a>
