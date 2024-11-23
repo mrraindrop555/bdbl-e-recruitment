@@ -74,7 +74,7 @@ class AdminVacancyController extends Controller
 
     public function edit(Vacancy $vacancy)
     {
-        Gate::allowIf(fn () => $vacancy->status != 'Shortlisted');
+        Gate::allowIf(fn () => $vacancy->status != 'Shortlisted' && $vacancy->status != 'Archived');
 
         return view(
             'admin.adminEditVacancy',
@@ -152,6 +152,13 @@ class AdminVacancyController extends Controller
         } elseif ($vacancy->status == 'Closed') {
             $vacancy->update(['status' => 'Open']);
         }
+
+        return redirect('/admin/vacancy')->with('success', "Vacancy status has been updated!");
+    }
+
+    public function archive(Vacancy $vacancy)
+    {
+        $vacancy->update(['status' => 'Archived']);
 
         return redirect('/admin/vacancy')->with('success', "Vacancy status has been updated!");
     }

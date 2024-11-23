@@ -1,7 +1,7 @@
 <x-layouts.admin>
     <form id="form" action="{{ "/admin/vacancy/{$vacancy->id}/shortlist" }}" method="POST" class="table-container">
         @csrf
-        <d class="text-dark" style="font-size: 24px;"><x-job-title :vacancy="$vacancy" big /></d>
+        <div class="text-dark" style="font-size: 24px;"><x-job-title :vacancy="$vacancy" big /></div>
         <div style="margin-bottom:20px">
             @if ($vacancy->status == 'Open')
                 Close the vacancy to shortlist applicants <span style="opacity: 0.5;">(Edit Vacancy)</span>

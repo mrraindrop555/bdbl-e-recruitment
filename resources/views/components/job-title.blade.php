@@ -17,5 +17,9 @@
         <span class="text-primary">
             (Shortlisted)
         </span>
+    @else 
+        <span class="text-danger">
+            (Archived)
+        </span>
     @endif
 </div>

@@ -70,13 +70,24 @@
                             </div>
                             {{-- <a href="/result" class="btn mt-2"
                                 style="background-color:#00ab41;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Edit</a> --}}
-                            <form class="d-inline" method="POST" action="{{ "/admin/vacancy/{$vacancy->id}" }}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" onclick="return confirm('Are you sure you want to delete this?')"
-                                    class="btn mt-2"
-                                    style="background-color:red;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Delete</button>
-                            </form>
+                            @if ($vacancy->status == 'Archived')
+                                <form class="d-inline" method="POST" action="{{ "/admin/vacancy/{$vacancy->id}" }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        onclick="return confirm('Are you sure you want to delete this?')"
+                                        class="btn mt-2"
+                                        style="background-color:red;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Delete</button>
+                                </form>
+                            @else
+                                <form class="d-inline" method="POST" action="{{ "/admin/vacancy/{$vacancy->id}/archive" }}">
+                                    @csrf
+                                    <button type="submit"
+                                        onclick="return confirm('Are you sure you want to archived this? Archived vacancy cannot be edited.')"
+                                        class="btn mt-2"
+                                        style="background-color:red;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Archive</button>
+                                </form>
+                            @endif
                             {{-- @if ($vacancy->status != 'Shortlisted')
                                 <form class="d-inline" method="POST"
                                     action="{{ "/admin/vacancy/{$vacancy->id}/toggle" }}">
