@@ -19,7 +19,7 @@ class AdminVacancyController extends Controller
 {
     public function index()
     {
-        return view('admin/adminindex', [
+        return view('admin/adminIndex', [
             'vacancies' => Vacancy::with('attachment')
                 ->get()
         ]);
