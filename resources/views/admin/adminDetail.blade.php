@@ -23,7 +23,7 @@
                                 <div>|</div>
                                 <div>
                                     Close datetime:
-                                    {{ date('M j, Y, g:i a', strtotime($vacancy->date_time)) }} <span
+                                    {{ date('M j, Y, g:i a', strtotime($vacancy->close_datetime)) }} <span
                                         style="opacity: 0.5; user-select: none;">({{ $vacancy->closure }})</span>
                                 </div>
                                 <div>|</div>

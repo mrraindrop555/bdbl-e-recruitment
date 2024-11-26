@@ -12,7 +12,7 @@
                                 <div>|</div>
                                 <div>
                                     Close datetime:
-                                    {{ date('M j, Y, g:i a', strtotime($vacancy->date_time)) }}
+                                    {{ date('M j, Y, g:i a', strtotime($vacancy->close_datetime)) }}
                                 </div>
                                 <div>|</div>
                                 <div>
