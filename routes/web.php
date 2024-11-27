@@ -38,8 +38,16 @@ Route::get('/adminDetail', function () {
     return view('admin/adminDetail');
 });
 
-
-Route::get('/login', [AuthController::class, 'create'])->name('login');
+Route::get('/login', function(){
+    if (Auth::user()){
+        return redirect('/admin/vacancy');
+    } else {
+        return view(
+            'Login'
+        );
+    }
+});
+// Route::get('/login', [AuthController::class, 'create'])->name('login');
 Route::post('/login', [AuthController::class, 'store']);
 Route::post('/logout', [AuthController::class, 'destroy']);
 
