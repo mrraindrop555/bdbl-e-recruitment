@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Application;
 use App\Models\ApplicationFile;
 use App\Models\User;
+use App\Notifications\ApplicationSubmitted;
 use App\Notifications\ApplicationRejected;
 use App\Notifications\ApplicationResubmitted;
 use App\Notifications\VacancyApplied;
@@ -357,13 +358,14 @@ class ApplicationForm extends Component
 
             $this->save_files($application);
 
+            $application->notify(new ApplicationSubmitted($this->application));
             Notification::send(User::all(), new VacancyApplied($application));
         });
 
         if ($this->vacancy->type == 'Internal') {
-            return redirect('/vacancy?type=internal')->with('success', 'Applied successfully! We will email the result when it is out la.');
+            return redirect('/vacancy?type=internal')->with('success', 'Applied successfully! Please check your inbox/spam for confirmation.');
         } else {
-            return redirect('/vacancy')->with('success', 'Applied successfully! We will email the result when it is out la.');
+            return redirect('/vacancy')->with('success', 'Applied successfully! Please check your inbox/spam for confirmation.');
         }
     }
 
