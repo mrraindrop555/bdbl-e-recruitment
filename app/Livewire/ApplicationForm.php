@@ -358,7 +358,7 @@ class ApplicationForm extends Component
 
             $this->save_files($application);
 
-            $application->notify(new ApplicationSubmitted(application));
+            $application->notify(new ApplicationSubmitted($application));
             Notification::send(User::all(), new VacancyApplied($application));
         });
 
