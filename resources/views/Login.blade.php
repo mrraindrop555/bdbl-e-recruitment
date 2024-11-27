@@ -28,7 +28,7 @@
         </div>
         <button type="submit">Login</button>
         <div style="margin-top: 20px;">
-            <a href="/">Go Back</a>
+            <a href="/">Home</a>
         </div>
     </form>
     <div style="opacity: 0.3; margin-top: 20px; user-select: none;">
