@@ -638,9 +638,9 @@
                 <div class="card-header bg-white">
                     Final Score <span style="opacity: 0.5; user-select: none;">
                         @if ($vacancy->type == 'External')
-                            (30:30:40)
+                            (30 - 30 - 40 Ratio)
                         @else
-                            (50:50)
+                            (50 - 50 Ratio)
                         @endif
                     </span>
                 </div>
