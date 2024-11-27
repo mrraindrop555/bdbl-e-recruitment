@@ -56,7 +56,7 @@ class ApplicationForm extends Component
     public $university_or_college_completion_year;
     public $university_or_college_percentage;
     public $university_or_college_marksheet;
-    public $degree_completed;
+    public $degree_completed = false;
     public $masters_institution_name;
     public $masters_course_name;
     public $masters_completion_year;
