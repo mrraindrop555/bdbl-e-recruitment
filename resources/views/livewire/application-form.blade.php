@@ -735,7 +735,7 @@
         @if ($vacancy->type == 'Experience')
             <div class="card text-center">
                 <div class="card-header bg-white">
-                    Final Score <span style="opacity: 0.5; user-select: none;">(30:30:40)</span>
+                    Final Score <span style="opacity: 0.5; user-select: none;">(50 - 50 Ratio)</span>
                 </div>
                 <div class="card-body">
                     <span class="fs-1 fw-bold">
