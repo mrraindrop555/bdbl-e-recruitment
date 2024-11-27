@@ -100,7 +100,7 @@
                             <td>
                                 @if ($vacancy->status == 'Closed')
                                     <input type="checkbox" name="shortlisted[]" value="{{ $application->id }}"
-                                        @if ($application->final_score >= $vacancy->benchmark) checked @endif style="margin-right: 10px;">
+                                    style="margin-right: 10px;">
                                 @elseif ($vacancy->status == 'Shortlisted' && $application->is_shortlisted)
                                     <span class='text-secondary fw-bold'>Shortlisted</span>
                                 @endif
