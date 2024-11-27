@@ -515,7 +515,7 @@
                 @endif
                 <div class="d-flex flex-column flex-md-row gap-3 mb-3">
                     <div class="form-floating flex-grow-1">
-                        @if ($vacancy->type == 'External')
+                        @if ($vacancy->type == 'External' || $vacancy->type == 'Experience' )
                             <input wire:model="university_or_college_name" type="text" class="form-control"
                                 placeholder="" @if (!(!$application || $state == 'editing' || $is_resubmission)) disabled @endif>
                             <label>University/College Name<x-required /></label>
@@ -536,7 +536,7 @@
                         @enderror
                     </div>
                     <div class="form-floating flex-grow-1">
-                        @if ($vacancy->type == 'External')
+                        @if ($vacancy->type == 'External'  || $vacancy->type == 'Experience' )
                             <input wire:model="university_or_college_course_name" type="text" class="form-control"
                                 placeholder="" @if (!(!$application || $state == 'editing' || $is_resubmission)) disabled @endif>
                         @else
@@ -556,7 +556,7 @@
                         @enderror
                     </div>
                     <div class="form-floating flex-grow-1">
-                        @if ($vacancy->type == 'External')
+                        @if ($vacancy->type == 'External'  || $vacancy->type == 'Experience' )
                             <input wire:model="university_or_college_completion_year" type="number"
                                 class="form-control" placeholder=""
                                 @if (!(!$application || $state == 'editing' || $is_resubmission)) disabled @endif>
@@ -581,7 +581,7 @@
                 <div class="d-flex flex-column flex-md-row gap-3 mb-3">
                     <div class="flex-grow-1">
                         <label class="form-label">Percentage<x-required /></label>
-                        @if ($vacancy->type == 'External')
+                        @if ($vacancy->type == 'External' || $vacancy->type == 'Experience' )
                             <input wire:model="university_or_college_percentage" wire:change="onPercentageChanged"
                                 type="number" class="form-control" step="0.01"
                                 @if (!(!$application || $state == 'editing' || $is_resubmission)) disabled @endif>

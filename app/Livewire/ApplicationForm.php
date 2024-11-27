@@ -210,10 +210,12 @@ class ApplicationForm extends Component
                 'university_or_college_course_name' => 'required',
                 'university_or_college_completion_year' => 'required',
                 'university_or_college_percentage' => 'required',
+                'university_or_college_marksheet' => 'nullable|mimes:pdf,jpeg,png,jpg|max:1024',
                 'masters_institution_name' => 'required',
                 'masters_course_name' => 'required',
                 'masters_completion_year' => 'required',
                 'masters_percentage' => 'required',
+                'masters_marksheet' => 'nullable|mimes:pdf,jpeg,png,jpg|max:1024',
                 'final_score' => 'required|decimal:0,2|min:0|max:100',
             ],
             "assistant_level_edit" => [
@@ -235,7 +237,7 @@ class ApplicationForm extends Component
                 'university_or_college_course_name' => 'required_if:degree_completed,true',
                 'university_or_college_completion_year' => 'required_if:degree_completed,true',
                 'university_or_college_percentage' => 'required_if:degree_completed,true',
-                'university_or_college_marksheet' => 'required_if:degree_completed,true|nullable|mimes:pdf,jpeg,png,jpg|max:1024',
+                'university_or_college_marksheet' => 'nullable|mimes:pdf,jpeg,png,jpg|max:1024',
                 'final_score' => 'required|decimal:0,2|min:0|max:100',
             ],
         ];
@@ -358,10 +360,10 @@ class ApplicationForm extends Component
             Notification::send(User::all(), new VacancyApplied($application));
         });
 
-        if ($this->vacancy->type = 'Internal') {
-            return redirect('/vacancy?type=internal')->with('success', 'Applied successfully!');
+        if ($this->vacancy->type == 'Internal') {
+            return redirect('/vacancy?type=internal')->with('success', 'Applied successfully! We will email the result when it is out la.');
         } else {
-            return redirect('/vacancy')->with('success', 'Applied successfully!');
+            return redirect('/vacancy')->with('success', 'Applied successfully! We will email the result when it is out la.');
         }
     }
 
@@ -482,6 +484,7 @@ class ApplicationForm extends Component
 
     public function reject()
     {
+
         if (!auth() || $this->vacancy->status != 'Open') {
             abort(403);
         }

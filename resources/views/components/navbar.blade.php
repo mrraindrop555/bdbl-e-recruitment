@@ -8,7 +8,7 @@
         <img src="{{ asset('assets/waves.png') }}" class="position-absolute bottom-0 end-0 z-n1 waves">
     @endif
     <div class="container-fluid px-md-4">
-        <a class="navbar-brand d-flex">
+        <a class="navbar-brand d-flex" href="/">
             <img src="{{ asset('assets/Logo.png') }}" alt="Bhutan Development Bank Limited" class="logo me-2">
             <h4 class="d-none d-sm-block my-auto" style="color:white;">
                 @if ($admin)
