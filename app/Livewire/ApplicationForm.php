@@ -503,7 +503,7 @@ class ApplicationForm extends Component
         $this->application->notify(new ApplicationRejected($this->application));
         // Mail::to($application->applicant_email)->send(new ApplicationRejected($application));
 
-        return redirect("/admin/resu/lt/{$this->vacancy->id}")->with('success', 'Application Rejected');
+        return redirect("/admin/result/{$this->vacancy->id}")->with('success', 'Application Rejected');
     }
 
     public function save_files(Application $application)
