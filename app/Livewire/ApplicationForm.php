@@ -502,7 +502,7 @@ class ApplicationForm extends Component
 
         // Send email to the applicant
         // $this->application->notify(new ApplicationRejected($this->application));
-        
+        Mail::to($this->application->applicant_email)->send(new ApplicationRejected($this->application));
 
         return redirect("/admin/resu/lt/{$this->vacancy->id}")->with('success', 'Application Rejected');
     }
@@ -643,4 +643,3 @@ class ApplicationForm extends Component
         $this->class_xii_stream = $stream;
     }
 }
-Mail::to($application->applicant_email)->send(new ApplicationRejected($application));
