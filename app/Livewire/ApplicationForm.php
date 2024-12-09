@@ -13,11 +13,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+
 
 class ApplicationForm extends Component
 {
@@ -500,7 +502,7 @@ class ApplicationForm extends Component
 
         // Send email to the applicant
         // $this->application->notify(new ApplicationRejected($this->application));
-        Mail::to($application->applicant_email)->send(new ApplicationRejected($application));
+        
 
         return redirect("/admin/resu/lt/{$this->vacancy->id}")->with('success', 'Application Rejected');
     }
@@ -641,3 +643,4 @@ class ApplicationForm extends Component
         $this->class_xii_stream = $stream;
     }
 }
+Mail::to($application->applicant_email)->send(new ApplicationRejected($application));
