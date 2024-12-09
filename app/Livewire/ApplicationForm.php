@@ -500,7 +500,7 @@ class ApplicationForm extends Component
 
         // Send email to the applicant
         $application = Application::find($this->application->id);
-        $this->application->notify(new ApplicationRejected($this->application));
+        $application->notify(new ApplicationRejected($application));
         // Mail::to($application->applicant_email)->send(new ApplicationRejected($application));
 
         return redirect("/admin/result/{$this->vacancy->id}")->with('success', 'Application Rejected');
