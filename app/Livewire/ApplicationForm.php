@@ -486,6 +486,7 @@ class ApplicationForm extends Component
 
     public function reject()
     {
+
         if (!auth() || $this->vacancy->status != 'Open') {
             abort(403);
         }
@@ -499,9 +500,7 @@ class ApplicationForm extends Component
         ]);
 
         // Send email to the applicant
-        $application = Application::find($this->application->id);
-        dd($application);
-        $application->notify(new ApplicationRejected($application));
+        $this->application->notify(new ApplicationRejected($this->application));
         // Mail::to($application->applicant_email)->send(new ApplicationRejected($application));
 
         return redirect("/admin/result/{$this->vacancy->id}")->with('success', 'Application Rejected');
