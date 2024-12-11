@@ -52,7 +52,7 @@ class AdminVacancyController extends Controller
 
 
         DB::transaction(function () use ($validated, $request) {
-            $vacancy = Vacancy::create([...$request->except(['attachment']), 'status' => 'Open']);
+            $vacancy = Vacancy::create([...$request->except(['attachment']), 'status' => 'Draft']);
             if ($request->hasFile('attachment')) {
                 $path = $validated['attachment']->store('attachments', 'public');
                 $vacancy->attachment()->save(new Attachment(['filename' => $path]));
@@ -154,6 +154,13 @@ class AdminVacancyController extends Controller
         }
 
         return redirect('/admin/vacancy')->with('success', "Vacancy status has been updated!");
+    }
+
+    public function open(Vacancy $vacancy)
+    {
+        $vacancy->update(['status' => 'Open']);
+
+        return redirect('/admin/vacancy')->with('success', "Vacancy is now open!");
     }
 
     public function archive(Vacancy $vacancy)

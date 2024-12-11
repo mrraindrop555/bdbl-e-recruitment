@@ -17,7 +17,11 @@
         <span class="text-primary">
             (Shortlisted)
         </span>
-    @else 
+    @elseif ($vacancy->status == 'Draft')
+        <span class="text-warning">
+            (Draft)
+        </span>
+    @elseif ($vacancy->status == 'Archived')
         <span class="text-danger">
             (Archived)
         </span>

@@ -79,6 +79,22 @@
                                         class="btn mt-2"
                                         style="background-color:red;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Delete</button>
                                 </form>
+                            @elseif ($vacancy->status == 'Draft')
+                                <form class="d-inline" method="POST" action="{{ "/admin/vacancy/{$vacancy->id}/open" }}">
+                                    @csrf
+                                    <button type="submit"
+                                        onclick="return confirm('Are you sure you want to float this vacancy?')"
+                                        class="btn mt-2"
+                                        style="background-color:green;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Float</button>
+                                </form>
+                                <form class="d-inline" method="POST" action="{{ "/admin/vacancy/{$vacancy->id}" }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        onclick="return confirm('Are you sure you want to delete this?')"
+                                        class="btn mt-2"
+                                        style="background-color:red;border:none;color:white;padding:6px 60px;border-radius:2px;font-size: 14px;">Delete</button>
+                                </form>
                             @else
                                 <form class="d-inline" method="POST" action="{{ "/admin/vacancy/{$vacancy->id}/archive" }}">
                                     @csrf

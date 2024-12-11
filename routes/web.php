@@ -59,6 +59,7 @@ Route::prefix('admin')
             return redirect('/admin/vacancy');
         });
         Route::resource('/vacancy', AdminVacancyController::class);
+        Route::post('/vacancy/{vacancy}/open', [AdminVacancyController::class, 'open']);
         Route::post('/vacancy/{vacancy}/archive', [AdminVacancyController::class, 'archive']);
         Route::post('/vacancy/{vacancy}/toggle', [AdminVacancyController::class, 'toggleStatus']);
         Route::get('/result', [AdminVacancyController::class, 'result']);
